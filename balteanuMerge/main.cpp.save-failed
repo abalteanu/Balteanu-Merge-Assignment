@@ -1,0 +1,80 @@
+
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+
+using namespace std;
+
+//prototyping
+int checkFiles (ifstream& File1);
+void readData (ifstream& File1, int data[], int& dataCounter);
+
+int main() {
+
+    int dataCounter1 = 0;
+    int dataCounter2 = 0;
+    int data1[100];
+    int data2[100];
+    int datafinal[200];
+
+
+    //input data from file
+    ifstream dataFile1("data1.txt");
+    ifstream dataFile2("data2.txt");
+    ofstream outputFile;
+    outputFile.open("outputFile.txt");
+    checkFiles(dataFile1);
+    checkFiles(dataFile2);
+
+    if (!outputFile.is_open() ) {
+        cout << "Unable to open file" << endl;
+        return 1;
+    }
+
+    readData (dataFile1, data1, dataCounter1);
+    readData (dataFile2, data2, dataCounter2);
+
+
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    //merging arrays
+    while (i < dataCounter1 || j < dataCounter2) {
+        if(data1[i] > data2[j]) {
+            datafinal[k] = data2[j];
+            cout << datafinal[k] << endl;
+            k++;
+            j++;
+        } else {
+            datafinal[k] = data1[i];
+            cout << datafinal[k] << endl;
+            k++;
+            i++;
+        }
+    }
+
+    dataFile1.close();
+    dataFile2.close();
+    outputFile.close();
+    return 0;
+}
+
+int checkFiles (ifstream& File1){
+
+    if (!File1.is_open() ) {
+        cout << "Unable to open file" << endl;
+        return 1;
+    }else {
+        return 0;
+    }
+}
+
+
+void readData (ifstream& File1, int data[], int& dataCounter) {
+
+    while(!File1.eof()) {
+        File1 >> data[dataCounter] ;
+        dataCounter++;
+    }
+    data[dataCounter]=0; //to ensure that the number after the last number in the array is a zero, so it is not printed in the output file later in the program
+}
